@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>HTML Editor</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
+	<style>
+		* {
+			box-sizing: border-box;
+		}
+
+		html,
+		body,
+		main {
+			height: 100%;
+		}
+
+		body {
+			margin: 0;
+			padding: 0;
+		}
+
+		body,
+		input,
+		select {
+			font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+			font-size: 1rem;
+			line-height: 1.3;
+		}
+
+		main {
+			padding: 1rem;
+			display: flex;
+			gap: 1rem;
+		}
+
+		main>div {
+			width: 50%;
+		}
+
+		.left-pane {}
+
+		.right-pane {
+			border: 2px solid #eee;
+			display: flex;
+			border-radius: 10px;
+			flex-direction: column;
+		}
+
+		.right-pane button {
+			padding: .5rem 1.5rem;
+			border: 0 none;
+			border-radius: .3rem;
+			background: #7611f7;
+			cursor: pointer;
+			display: flex;
+			gap: .5rem;
+			align-items: center;
+			color: #fff;
+			font-size: 1.125rem;
+			transition: box-shadow .5s;
+		}
+
+		.right-pane button svg {
+			width: 36px;
+			height: 36px;
+		}
+
+		.right-pane button:hover {
+			box-shadow: 0 0 0 5px #7611f744;
+		}
+
+		.right-pane form {
+			height: 100px;
+			padding: 10px;
+			box-shadow: 0 2px 2px -2px rgba(34, 47, 62, 0.1),
+				0 8px 8px -4px rgba(34, 47, 62, 0.07);
+			position: relative;
+			z-index: 1;
+		}
+
+		.CodeMirror {
+			height: 100%;
+		}
+	</style>
+</head>
+
+<body>
+	<main>
+		<div class="left-pane"><textarea id="visual"></textarea></div>
+		<div class="right-pane">
+			<form>
+				<button id="clean-html" type="button" value="clean-html">
+					<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 512 512">
+						<g>
+							<path d="M202.563,507.528L4.569,309.534c-3.093-3.092-4.711-7.364-4.444-11.731  c0.268-4.366,2.395-8.407,5.842-11.1L174.68,154.931c6.078-4.749,14.743-4.217,20.196,1.237l161.054,161.053  c5.453,5.453,5.984,14.118,1.237,20.196L225.392,506.129c-2.692,3.447-6.734,5.574-11.1,5.842  C209.927,512.239,205.656,510.62,202.563,507.528z" fill="#ffda68"></path>
+							<path d="M357.166,337.416c4.749-6.078,4.217-14.743-1.237-20.196l-80.883-80.883L103.21,408.175  l99.352,99.352c3.093,3.092,7.364,4.711,11.731,4.444c4.366-0.268,8.407-2.395,11.1-5.842L357.166,337.416z" fill="#ffa918"></path>
+							<path d="M326.968,235.938l-51.004-51.004c-5.963-5.963-5.963-15.63,0-21.594l148.33-148.329  c20.015-20.015,52.583-20.015,72.598,0c20.015,20.015,20.016,52.583,0,72.598L348.562,235.938  C342.599,241.901,332.931,241.901,326.968,235.938z" fill="#3779b2"></path>
+							<path d="M334.336,338.814L173.282,177.762c-3.092-3.092-4.711-7.364-4.444-11.731  c0.268-4.366,2.395-8.407,5.842-11.1l14.266-11.142c28.509-22.266,69.297-19.769,94.873,5.807l78.681,78.681  c25.577,25.577,28.074,66.363,5.807,94.872l-11.143,14.267c-2.692,3.447-6.734,5.574-11.1,5.842  C341.699,343.525,337.428,341.908,334.336,338.814z" fill="#ff5957"></path>
+							<path d="M135.545,440.505c-5.727-5.727-6-15.001-0.494-21.057l64.52-70.993  c5.672-6.241,15.328-6.702,21.569-1.031c6.231,5.721,6.702,15.328,1.03,21.569l-64.52,70.993  c-5.672,6.241-15.328,6.702-21.569,1.031C135.897,440.848,135.718,440.678,135.545,440.505z" fill="#fc7718"></path>
+							<path d="M71.594,376.554c-0.174-0.174-0.344-0.352-0.512-0.535c-5.671-6.241-5.21-15.897,1.031-21.569  l70.993-64.52c6.239-5.671,15.863-5.216,21.569,1.03c5.671,6.241,5.21,15.897-1.031,21.569l-70.993,64.52  C86.596,382.553,77.32,382.28,71.594,376.554z" fill="#ffa918"></path>
+							<path d="M496.892,15.011c-0.087-0.087-0.178-0.166-0.265-0.252L301.208,210.178l25.761,25.761  c5.963,5.963,15.63,5.963,21.594,0l148.329-148.33C516.906,67.594,516.906,35.026,496.892,15.011z" fill="#214884"></path>
+							<path d="M368.309,323.149c22.265-28.509,19.769-69.295-5.807-94.872l-39.697-39.697l-69.351,69.351  l80.883,80.883c3.092,3.092,7.364,4.711,11.731,4.444c4.366-0.268,8.407-2.395,11.1-5.842L368.309,323.149z" fill="#fc1b5b"></path>
+						</g>
+					</svg>
+					<span>Clean HTML!</span>
+				</button>
+			</form>
+			<textarea id="code"></textarea>
+		</div>
+	</main>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.0.0/tinymce.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/selection/active-line.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/xml/xml.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.0/beautify.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.0/beautify-html.min.js"></script>
+	<script>
+		const cleanHTML = html => {
+			const singleTag = /area|base|br|col|command|embed|hr|img|input|keygen|param|source|track|wbr/i;
+			const globalAttr = /accesskey|class|contenteditable|data-|id|lang|spellcheck|tabindex|spellcheck/;
+
+			let div = document.createElement('div');
+			div.innerHTML = html.replace(/[\u200B-\u200D\uFEFF]/g, ' ');
+
+			Array.prototype.slice.call(div.querySelectorAll('*')).forEach(el => {
+				Array.prototype.slice.call(el.attributes).forEach(function(attr) {
+					if (globalAttr.test(attr.name)) {
+						el.removeAttribute(attr.name);
+					}
+				});
+
+				if (el.innerText.trim() == '' && !singleTag.test(el.innerHTML) && !singleTag.test(el.tagName)) {
+					el.remove();
+				}
+			});
+
+			let txt = document.createElement("textarea");
+			txt.innerHTML = div.innerHTML;
+
+			return html_beautify(txt.value.replace(/\s{2,}/g, ' ').replace(/<!--([\s\S]*?)-->/g, ''), {
+				indent_size: 4,
+				space_in_empty_paren: true
+			});
+		}
+
+		const siteCodeMirror = CodeMirror.fromTextArea(
+			document.getElementById("code"), {
+				height: "100%",
+				lineNumbers: true,
+				matchBrackets: true,
+				mode: "text/html",
+				indentUnit: 4,
+				indentWithTabs: true,
+				styleActiveLine: {
+					nonEmpty: true,
+				},
+			}
+		);
+
+		let updateFromTinyMCE = true;
+		siteCodeMirror.on("change", (editor) => {
+			if (updateFromTinyMCE == false) {
+				let html = editor.getValue()
+				tinymce.get("visual").setContent(html);
+			}
+			updateFromTinyMCE = false;
+		});
+
+		const updateCodeMirrorContent = (editor) => {
+			siteCodeMirror.setValue(editor.getContent(), {
+				indent_size: 4,
+				indent_with_tabs: true,
+				space_in_empty_paren: true,
+			});
+			updateFromTinyMCE = true;
+		};
+
+		tinymce.init({
+			selector: "textarea#visual",
+			height: "100%",
+			plugins: 'lists advlist',
+			toolbar: "blocks | " +
+				"bold italic backcolor | " +
+				"alignleft aligncenter alignright | " +
+				"bullist numlist | " +
+				"removeformat",
+			setup: function(editor) {
+				editor.on("Dirty Change KeyUp", () => {
+					updateCodeMirrorContent(editor);
+				});
+			},
+			resize: false,
+			branding: false,
+		});
+
+		document.getElementById('clean-html').addEventListener('click', () => {
+			let html = cleanHTML(siteCodeMirror.getValue());
+
+			siteCodeMirror.setValue(html);
+			tinymce.get('visual').setContent(html);
+		});
+	</script>
+</body>
+
+</html>
