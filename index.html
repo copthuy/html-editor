@@ -140,8 +140,10 @@
 			let txt = document.createElement("textarea");
 			txt.innerHTML = div.innerHTML;
 
-			/* Some more clean up */
+			/* Some more clean up & punctuation fixes */
 			html = txt.value;
+			html = html.replace(/\s+([,.:!?])/g, '$1 ');
+			html = html.replace(/([,.:!?])\s+<\/(blockquote|h[1-6]|li|p)>/gi, '$1</$2>');
 			html = html.replace(/\s{2,}/g, ' ');
 			html = html.replace(/<!--([\s\S]*?)-->/g, '');
 			html = html.replace(/<\/?span>/gi, '');
