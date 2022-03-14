@@ -169,7 +169,6 @@
 			html = html.replace(/([,.:!?])\s+<\/(blockquote|h[1-6]|li|p)>/gi, '$1</$2>');
 			html = html.replace(/\s{2,}/g, ' ');
 			html = html.replace(/<!--([\s\S]*?)-->/g, '');
-			html = html.replace(/<\/?span>/gi, '');
 			html = html.replace(/\s+<(blockquote|h[1-6]|ol|ul|li|p)/gi, '<$1');
 			html = html.replace(/<\/(blockquote|h[1-6]|ol|ul|li|p)>\s+/gi, '</$1>');
 
