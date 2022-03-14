@@ -146,14 +146,15 @@
 			let div = document.createElement('div');
 			div.innerHTML = html.replace(/[\u200B-\u200D\uFEFF]/g, ' ');
 
-			/* Clean empty tags */
 			Array.prototype.slice.call(div.querySelectorAll('*')).forEach(el => {
+				/* Remove attributes */
 				Array.prototype.slice.call(el.attributes).forEach(attr => {
 					if (globalAttr.test(attr.name) || attr.value == 'auto') {
 						el.removeAttribute(attr.name);
 					}
 				});
 
+				/* Clean empty tags */
 				if (el.innerText.trim() == '' && !singleTag.test(el.innerHTML) && !singleTag.test(el.tagName)) {
 					el.remove();
 				}
