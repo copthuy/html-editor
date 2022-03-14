@@ -149,7 +149,7 @@
 			/* Clean empty tags */
 			Array.prototype.slice.call(div.querySelectorAll('*')).forEach(el => {
 				Array.prototype.slice.call(el.attributes).forEach(attr => {
-					if (globalAttr.test(attr.name)) {
+					if (globalAttr.test(attr.name) || attr.value == 'auto') {
 						el.removeAttribute(attr.name);
 					}
 				});
@@ -166,6 +166,11 @@
 					}
 					el.parentNode.replaceChild(docFrag, el);
 				}
+
+				/* Trim content */
+				if (/blockquote|h[1-6]|li|p|q/i.test(el.tagName)) {
+					el.innerHTML = el.innerHTML.trim();
+				}
 			});
 
 			/* HTML entity decode: html entity to utf-8 character */
@@ -175,7 +180,6 @@
 			/* Some more clean up & punctuation fixes */
 			html = txt.value;
 			html = html.replace(/\s+([,.:!?])/g, '$1 ');
-			html = html.replace(/([,.:!?])\s+<\/(blockquote|h[1-6]|li|p)>/gi, '$1</$2>');
 			html = html.replace(/\s{2,}/g, ' ');
 			html = html.replace(/<!--([\s\S]*?)-->/g, '');
 			html = html.replace(/\s+<(blockquote|h[1-6]|ol|ul|li|p)/gi, '<$1');
