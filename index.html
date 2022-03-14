@@ -175,22 +175,17 @@
 			});
 
 			/* HTML entity decode: html entity to utf-8 character */
-			let txt = document.createElement("textarea");
-			txt.innerHTML = div.innerHTML;
+			let textarea = document.createElement("textarea");
+			textarea.innerHTML = div.innerHTML;
 
 			/* Some more clean up & punctuation fixes */
 			html = txt.value;
-			html = html.replace(/\s+([,.:!?])/g, '$1 ');
+			html = html.replace(/\s+([,.:;!?])/g, '$1 ');
 			html = html.replace(/\s{2,}/g, ' ');
 			html = html.replace(/<!--([\s\S]*?)-->/g, '');
 			html = html.replace(/\s+<(blockquote|h[1-6]|ol|ul|li|p)/gi, '<$1');
 			html = html.replace(/<\/(blockquote|h[1-6]|ol|ul|li|p)>\s+/gi, '</$1>');
 
-			/* Beautify html code */
-			html = html_beautify(html, {
-				indent_size: 4,
-				space_in_empty_paren: true
-			})
 			return html;
 		}
 
@@ -247,7 +242,10 @@
 		document.getElementById('clean-html').addEventListener('click', () => {
 			let html = cleanHTML(siteCodeMirror.getValue());
 
-			siteCodeMirror.setValue(html);
+			siteCodeMirror.setValue(html_beautify(html, {
+				indent_size: 4,
+				space_in_empty_paren: true
+			}));
 			tinymce.get('visual').setContent(html);
 		});
 	</script>
