@@ -157,6 +157,15 @@
 				if (el.innerText.trim() == '' && !singleTag.test(el.innerHTML) && !singleTag.test(el.tagName)) {
 					el.remove();
 				}
+
+				/* Remove no attribute SPAN tag */
+				if (/span/i.test(el.tagName) && el.attributes.length == 0) {
+					let docFrag = document.createDocumentFragment();
+					while (el.firstChild) {
+						docFrag.appendChild(el.firstChild);
+					}
+					el.parentNode.replaceChild(docFrag, el);
+				}
 			});
 
 			/* HTML entity decode: html entity to utf-8 character */
