@@ -195,7 +195,7 @@
 				"alignleft aligncenter alignright | " +
 				"bullist numlist | " +
 				"removeformat",
-			setup: function(editor) {
+			setup: (editor) => {
 				editor.on("Dirty Change KeyUp", () => {
 					updateCodeMirrorContent(editor);
 				});
