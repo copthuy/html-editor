@@ -149,28 +149,38 @@
 			Array.prototype.slice.call(div.querySelectorAll('*')).forEach(el => {
 				/* Remove attributes */
 				Array.prototype.slice.call(el.attributes).forEach(attr => {
-					if (globalAttr.test(attr.name) || attr.value == 'auto') {
+					if (globalAttr.test(attr.name) || /normal|default|none|auto/i.test(attr.value)) {
 						el.removeAttribute(attr.name);
 					}
 				});
 
-				/* Clean empty tags */
-				if (el.innerText.trim() == '' && !singleTag.test(el.innerHTML) && !singleTag.test(el.tagName)) {
-					el.remove();
+				/* Unwrap tags contains only empty space */
+				if (/^(\s|&nbsp;)+$/.test(el.innerHTML)) {
+					let space = document.createTextNode(' ');
+					el.parentNode.replaceChild(space, el);
 				}
+			});
 
-				/* Remove no attribute SPAN tag */
-				if (/span/i.test(el.tagName) && el.attributes.length == 0) {
+			/* Remove no attribute SPAN tag */
+			Array.prototype.slice.call(div.querySelectorAll('span')).forEach(el => {
+				if (el.attributes.length == 0) {
 					let docFrag = document.createDocumentFragment();
 					while (el.firstChild) {
 						docFrag.appendChild(el.firstChild);
 					}
 					el.parentNode.replaceChild(docFrag, el);
 				}
+			});
 
-				/* Trim content */
-				if (/blockquote|h[1-6]|li|p|q/i.test(el.tagName)) {
-					el.innerHTML = el.innerHTML.trim();
+			/* Trim content */
+			Array.prototype.slice.call(div.querySelectorAll('blockquote, h1, h2, h3, h4, h5, h6, li, p, q')).forEach(el => {
+				el.innerHTML = el.innerHTML.trim();
+			});
+
+			/* Clean empty tags */
+			Array.prototype.slice.call(div.querySelectorAll('*')).forEach(el => {
+				if (el.innerText == '' && !singleTag.test(el.innerHTML) && !singleTag.test(el.tagName)) {
+					el.remove();
 				}
 			});
 
@@ -179,12 +189,13 @@
 			textarea.innerHTML = div.innerHTML;
 
 			/* Some more clean up & punctuation fixes */
-			html = txt.value;
+			html = textarea.value;
 			html = html.replace(/\s+([,.:;!?])/g, '$1 ');
 			html = html.replace(/\s{2,}/g, ' ');
 			html = html.replace(/<!--([\s\S]*?)-->/g, '');
 			html = html.replace(/\s+<(blockquote|h[1-6]|ol|ul|li|p)/gi, '<$1');
 			html = html.replace(/<\/(blockquote|h[1-6]|ol|ul|li|p)>\s+/gi, '</$1>');
+			html = html.replace(/([,.:;!?])\s+(<\/[^>]+>)/gi, '$1$2 ');
 
 			return html;
 		}
