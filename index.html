@@ -191,13 +191,13 @@
 			/* Some more clean up & punctuation fixes */
 			html = textarea.value;
 			html = html.replace(/\s+([,.:;!?])/g, '$1 ');
-			html = html.replace(/<\/(strong|span|em|del)>(\s*)<\1>/gi, '$2');
+			html = html.replace(/<\/(strong|span|em|del|sub|sup|b|u|s|i|center|big|small)>(\s*)<\1>/gi, '$2');
 			html = html.replace(/\s{2,}/g, ' ');
 			html = html.replace(/<!--([\s\S]*?)-->/g, '');
 			html = html.replace(/\s+<(blockquote|h[1-6]|ol|ul|li|p)/gi, '<$1');
 			html = html.replace(/<\/(blockquote|h[1-6]|ol|ul|li|p)>\s+/gi, '</$1>');
 			html = html.replace(/([,.:;!?])\s+(<\/[^>]+>)/gi, '$1$2 ');
-			
+
 
 			return html;
 		}
