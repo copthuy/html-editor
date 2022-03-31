@@ -161,9 +161,9 @@
 				}
 			});
 
-			/* Remove no attribute SPAN tag */
+			/* Remove no attribute SPAN or mso SPAN tag */
 			Array.prototype.slice.call(div.querySelectorAll('span')).forEach(el => {
-				if (el.attributes.length == 0) {
+				if (el.attributes.length == 0 || /mso-/.test(el.className) || /mso-/.test(el.getAttribute('style'))) {
 					let docFrag = document.createDocumentFragment();
 					while (el.firstChild) {
 						docFrag.appendChild(el.firstChild);
@@ -191,11 +191,13 @@
 			/* Some more clean up & punctuation fixes */
 			html = textarea.value;
 			html = html.replace(/\s+([,.:;!?])/g, '$1 ');
+			html = html.replace(/<\/(strong|span|em|del)>(\s*)<\1>/gi, '$2');
 			html = html.replace(/\s{2,}/g, ' ');
 			html = html.replace(/<!--([\s\S]*?)-->/g, '');
 			html = html.replace(/\s+<(blockquote|h[1-6]|ol|ul|li|p)/gi, '<$1');
 			html = html.replace(/<\/(blockquote|h[1-6]|ol|ul|li|p)>\s+/gi, '</$1>');
 			html = html.replace(/([,.:;!?])\s+(<\/[^>]+>)/gi, '$1$2 ');
+			
 
 			return html;
 		}
