@@ -1,9 +1,6 @@
 # html-editor
-An online HTML editor which helps you to clean up your HTML code.
-This is a small project to help me clean up all the html files generated from Microsoft Word before I can push them live.
 
-Here are the steps to export Microsoft Word document:
-1. Save as HTML from Microsoft Word
-2. Open the HTML file in browser
-3. Make a simple copy and paste it in the html-editor
-4. Click on the Clean button
+- WYSIWYG editor (by [TinyMCE](https://github.com/tinymce/tinymce))
+- Markdown converter (by [Turndown](https://github.com/mixmark-io/turndown) & [Showdown](https://github.com/showdownjs/showdown))
+- Code editor (by [CodeMirror](https://github.com/codemirror/dev))
+- Other libraries [Prettier](https://github.com/prettier/prettier), [DOMPurify](https://github.com/cure53/DOMPurify), HTML entity encoder/decoder [he](https://github.com/mathiasbynens/he)
