@@ -11,7 +11,9 @@ export async function formatCode(html) {
 }
 
 function clean(html) {
-    html = DOMPurify.sanitize(html);
+    html = DOMPurify.sanitize(html, {
+        FORBID_ATTR: ['id']
+    });
     html = entity(html);
     html = html.replace(/&amp;(?=[\S])/g, '&');
 
