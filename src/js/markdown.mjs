@@ -1,6 +1,8 @@
 export function processMarkDown(htmlString) {
     const clean = DOMPurify.sanitize(htmlString);
+    const gfm = turndownPluginGfm.gfm
     const converter = new TurndownService();
+    converter.use(gfm);
 
     return converter.turndown(clean);
 }
