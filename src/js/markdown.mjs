@@ -6,6 +6,6 @@ export function processMarkDown(htmlString) {
 }
 
 export function processHTML(markdownString) {
-    const converter = new showdown.Converter();
+    const converter = new showdown.Converter({tables: true});
     return converter.makeHtml(markdownString);
 }

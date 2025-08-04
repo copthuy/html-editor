@@ -10,7 +10,7 @@ export default function initTinymce() {
         branding: false,
         width: '100%',
         height: '100%',
-        plugins: ['link', 'lists'],
+        plugins: ['link', 'lists', 'table'],
         toolbar: [
             { name: 'history', items: ['undo', 'redo'] },
             { name: 'styles', items: ['styles'] },
@@ -19,7 +19,8 @@ export default function initTinymce() {
             { name: 'link', items: ['link'] },
             { name: 'color', items: ['forecolor', 'backcolor'] },
             { name: 'lists', items: ['bullist', 'numlist'] },
-            { name: 'indentation', items: ['outdent', 'indent'] }
+            { name: 'indentation', items: ['outdent', 'indent'] },
+            { name: 'table', items: ['table'] }
         ],
         setup: tinymceSetup
     });
