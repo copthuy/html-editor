@@ -113,6 +113,7 @@ section {
 	align-items: center;
 	gap: 0.25rem;
 	position: relative;
+	user-select: none;;
 
 	input[type="radio"] {
 		position: absolute;

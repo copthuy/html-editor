@@ -70,7 +70,7 @@ export default function initCodeMirror() {
 
     document.querySelector('[name="entity"]').addEventListener('change', () => {
         const doc = editor.state.doc.toString();
-        editorUpdate(editor, doc);
+        editorUpdate(editor, doc, false);
     });
 
     document.addEventListener('wysiwygChanged', async evt => {
@@ -78,15 +78,14 @@ export default function initCodeMirror() {
             return;
         }
         let doc = evt.detail.data;
-        //console.log(doc);
         await editorUpdate(editor, doc);
     });
 }
 
-async function editorUpdate(editor, doc) {
+async function editorUpdate(editor, doc, process = true) {
     const option = document.querySelector('[name="lang"]:checked');
     
-    if (option.value === 'markdown') {
+    if (process === true && option.value === 'markdown') {
         doc = processMarkDown(doc);
     }
     doc = await formatCode(doc);

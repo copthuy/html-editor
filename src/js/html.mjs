@@ -39,8 +39,7 @@ function entity(html) {
             })
             : he.decode(original);
 
-        const newNode = doc.createTextNode(transformed);
-        node.parentNode.replaceChild(newNode, node);
+        node.nodeValue = transformed;
     }
 
     let response = doc.body.innerHTML;
