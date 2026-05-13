@@ -1,10 +1,10 @@
-import { basicSetup } from "https://esm.sh/codemirror";
-import { EditorView, keymap } from "https://esm.sh/@codemirror/view";
-import { indentWithTab } from "https://esm.sh/@codemirror/commands";
-import { EditorState, StateEffect } from "https://esm.sh/@codemirror/state";
-import { html } from "https://esm.sh/@codemirror/lang-html";
-import { markdown } from "https://esm.sh/@codemirror/lang-markdown";
-import { oneDark } from "https://esm.sh/@codemirror/theme-one-dark";
+import { basicSetup } from "codemirror";
+import { EditorView, keymap } from "@codemirror/view";
+import { indentWithTab } from "@codemirror/commands";
+import { EditorState, StateEffect } from "@codemirror/state";
+import { html } from "@codemirror/lang-html";
+import { markdown } from "@codemirror/lang-markdown";
+import { oneDark } from "@codemirror/theme-one-dark";
 import { formatCode } from './html.mjs';
 import { processMarkDown, processHTML } from './markdown.mjs';
 

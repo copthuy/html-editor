@@ -1,7 +1,17 @@
+import tinymce from 'tinymce/tinymce';
+import 'tinymce/models/dom';
+import 'tinymce/themes/silver';
+import 'tinymce/icons/default';
+import 'tinymce/plugins/link';
+import 'tinymce/plugins/lists';
+import 'tinymce/plugins/table';
+import 'tinymce/plugins/searchreplace';
+
 export default function initTinymce() {
 	tinymce.init({
 		selector: "#wysiwyg",
 		license_key: "gpl",
+		base_url: './dist/tinymce', // This will be the path to TinyMCE assets in dist
 		browser_spellcheck: false,
 		promotion: false,
 		//skin: 'oxide-dark',

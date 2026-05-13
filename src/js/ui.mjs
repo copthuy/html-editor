@@ -47,12 +47,20 @@ class SplitterBar {
 }
 
 export default function initUI() {
-    window.addEventListener('DOMContentLoaded', () => {
+    const setup = () => {
         const container = document.querySelector('main');
         const left = document.getElementById('html');
         const right = document.getElementById('code');
         const divider = document.getElementById('divider');
 
-        new SplitterBar(container, left, right, divider);
-    });
+        if (container && left && right && divider) {
+            new SplitterBar(container, left, right, divider);
+        }
+    };
+
+    if (document.readyState === 'loading') {
+        window.addEventListener('DOMContentLoaded', setup);
+    } else {
+        setup();
+    }
 }

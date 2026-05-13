@@ -1,6 +1,10 @@
+import DOMPurify from 'dompurify';
+import TurndownService from 'turndown';
+import { gfm } from 'turndown-plugin-gfm';
+import showdown from 'showdown';
+
 export function processMarkDown(htmlString) {
     const clean = DOMPurify.sanitize(htmlString);
-    const gfm = turndownPluginGfm.gfm
     const converter = new TurndownService();
     converter.use(gfm);
 

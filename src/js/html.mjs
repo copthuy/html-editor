@@ -1,8 +1,14 @@
+import { format } from 'prettier/standalone';
+import * as prettierPluginHtml from 'prettier/plugins/html';
+import * as prettierPluginMarkdown from 'prettier/plugins/markdown';
+import DOMPurify from 'dompurify';
+import he from 'he';
+
 export async function formatCode(html) {
     const option = document.querySelector('[name="lang"]:checked')?.value;
-    const formatted = await prettier.format(clean(html), {
+    const formatted = await format(clean(html), {
         parser: option,
-        plugins: [option === 'markdown' ? prettierPlugins.markdown : prettierPlugins.html],
+        plugins: [option === 'markdown' ? prettierPluginMarkdown : prettierPluginHtml],
         tabWidth: 4,
         useTabs: false
     });
@@ -29,15 +35,29 @@ function entity(html) {
     let node;
 
     while ((node = walker.nextNode())) {
-        const original = node.nodeValue;
+        let parent = node.parentElement;
+        let skip = false;
+        while (parent && parent !== doc.body) {
+            const tag = parent.tagName.toLowerCase();
+            if (tag === 'pre' || tag === 'code') {
+                skip = true;
+                break;
+            }
+            parent = parent.parentElement;
+        }
+
+        let content = node.nodeValue;
+        if (!skip) {
+            content = content.replace(/\s+/g, ' ');
+        }
 
         const transformed = encode
-            ? he.encode(original, {
+            ? he.encode(content, {
                 useNamedReferences: true,
                 encodeEverything: false,
                 allowUnsafeSymbols: false
             })
-            : he.decode(original);
+            : he.decode(content);
 
         node.nodeValue = transformed;
     }
